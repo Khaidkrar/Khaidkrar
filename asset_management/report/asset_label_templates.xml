@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- 2x7 Template - Price in TOP-RIGHT -->
+        <template id="report_simple_label2x7">
+            <t t-set="barcode_size" t-value="'width:36mm;height:15mm'"/>
+            <t t-set="table_style" t-value="'width:97mm;height:37.1mm;' + table_style"/>
+            <td t-att-style="make_invisible and 'visibility:hidden;'" >
+                <div t-att-style="table_style + 'border-radius:3mm;box-shadow:0 1px 3px rgba(0,0,0,0.15);overflow:hidden;display:flex;flex-direction:column;height:100%;box-sizing:border-box;border:1px solid #e0e0e0;'">
+                    <!-- Red band at top -->
+                    <div t-att-style="'background-color:' + (red_band_color or '#dc3545') + ';color:white;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;flex-shrink:0;overflow:hidden;padding:2mm 3mm;height:9mm;min-height:9mm;max-height:9mm;'">
+                        <div style="font-weight:600;letter-spacing:0.5px;text-transform:uppercase;line-height:1.1;white-space:nowrap;font-size:8px;margin-bottom:0.5mm;">PROPERTY OF</div>
+                        <div style="font-weight:700;text-transform:uppercase;line-height:1.1;max-width:95%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;"><t t-esc="company.name if company else ''"/></div>
+                    </div>
+                    <!-- White section with price in TOP-RIGHT corner -->
+                    <div style="background-color:white;flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:0;overflow:hidden;box-sizing:border-box;position:relative;padding:2mm 3mm;">
+                        <t t-if="price_included and asset and company">
+                            <div style="position:absolute;top:2mm;right:2.5mm;text-align:right;z-index:10;margin:0;width:auto;overflow:hidden;">
+                                <strong style="font-weight:700;color:#000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;font-size:11px;line-height:1;" t-esc="asset.amount or 0"
+                                        t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"/>
+                            </div>
+                        </t>
+                        <div style="width:100%;text-align:center;overflow:hidden;margin-top:1mm;">
+                            <t t-if="barcode and not make_invisible">
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=0' % ('Code128', quote_plus(barcode or ''), 600, 150)" t-att-style="barcode_size" alt="Barcode" style="display:block;margin:0 auto;"/>
+                            </t>
+                            <div style="font-weight:700;color:#000;text-align:center;letter-spacing:0.5px;font-family:'Courier New',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2mm;font-size:10px;margin-top:1mm;"><t t-esc="asset.name if asset else ''"/></div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </template>
+
+        <!-- 4x7 Template - Price at BOTTOM CENTER -->
+        <template id="report_simple_label4x7">
+            <t t-set="barcode_size" t-value="'width:28mm;height:10mm'"/>
+            <t t-set="table_style" t-value="'width:47mm;height:37.1mm;' + table_style"/>
+            <td t-att-style="make_invisible and 'visibility:hidden;'" >
+                <div t-att-style="table_style + 'border-radius:3mm;box-shadow:0 1px 3px rgba(0,0,0,0.15);overflow:hidden;display:flex;flex-direction:column;height:100%;box-sizing:border-box;border:1px solid #e0e0e0;'">
+                    <!-- Red band at top -->
+                    <div t-att-style="'background-color:' + (red_band_color or '#dc3545') + ';color:white;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;flex-shrink:0;overflow:hidden;padding:1.5mm 2mm;height:8mm;min-height:8mm;max-height:8mm;'">
+                        <div style="font-weight:600;letter-spacing:0.5px;text-transform:uppercase;line-height:1.1;white-space:nowrap;font-size:7px;margin-bottom:0.4mm;">PROPERTY OF</div>
+                        <div style="font-weight:700;text-transform:uppercase;line-height:1.1;max-width:95%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;"><t t-esc="company.name if company else ''"/></div>
+                    </div>
+                    <!-- White section with barcode and price at bottom -->
+                    <div style="background-color:white;flex:1;display:flex;flex-direction:column;justify-content:space-between;align-items:center;min-height:0;overflow:hidden;box-sizing:border-box;position:relative;padding:2mm 2mm 1.5mm 2mm;">
+                        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%;text-align:center;overflow:hidden;">
+                            <t t-if="barcode and not make_invisible">
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=0' % ('Code128', quote_plus(barcode or ''), 600, 150)" t-att-style="barcode_size" alt="Barcode" style="display:block;margin:0 auto;"/>
+                            </t>
+                            <div style="font-weight:700;color:#000;text-align:center;letter-spacing:0.5px;font-family:'Courier New',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2mm;font-size:8.5px;margin-top:0.8mm;"><t t-esc="asset.name if asset else ''"/></div>
+                        </div>
+                        <t t-if="price_included and asset and company">
+                            <div style="margin-top:1mm;width:100%;text-align:center;overflow:hidden;">
+                                <strong style="font-weight:700;color:#000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;font-size:9.5px;" t-esc="asset.amount or 0"
+                                        t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"/>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </td>
+        </template>
+
+        <!-- 4x12 Template - Compact with price at bottom -->
+        <template id="report_simple_label4x12">
+            <t t-set="barcode_size" t-value="'width:26mm;height:5mm'"/>
+            <t t-set="table_style" t-value="'width:43mm;height:19mm;' + table_style"/>
+            <td t-att-style="make_invisible and 'visibility:hidden;'" >
+                <div t-att-style="table_style + 'border-radius:2mm;box-shadow:0 1px 3px rgba(0,0,0,0.15);overflow:hidden;display:flex;flex-direction:column;height:100%;box-sizing:border-box;border:1px solid #e0e0e0;'">
+                    <!-- Red band at top -->
+                    <div t-att-style="'background-color:' + (red_band_color or '#dc3545') + ';color:white;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;flex-shrink:0;overflow:hidden;padding:0.8mm 1.5mm;height:5.5mm;min-height:5.5mm;max-height:5.5mm;'">
+                        <div style="font-weight:600;letter-spacing:0.5px;text-transform:uppercase;line-height:1.1;white-space:nowrap;font-size:5.5px;margin-bottom:0.3mm;">PROPERTY OF</div>
+                        <div style="font-weight:700;text-transform:uppercase;line-height:1.1;max-width:95%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:6.5px;"><t t-esc="company.name if company else ''"/></div>
+                    </div>
+                    <!-- White section - compact -->
+                    <div style="background-color:white;flex:1;display:flex;flex-direction:column;justify-content:space-between;align-items:center;min-height:0;overflow:hidden;box-sizing:border-box;position:relative;padding:1mm 1.5mm 0.8mm 1.5mm;">
+                        <div cstyle="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%;text-align:center;overflow:hidden;">
+                            <t t-if="barcode and not make_invisible">
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=0' % ('Code128', quote_plus(barcode or ''), 600, 150)" t-att-style="barcode_size" alt="Barcode" style="display:block;margin:0 auto;max-height:5mm;"/>
+                            </t>
+                            <div style="font-weight:700;color:#000;text-align:center;letter-spacing:0.5px;font-family:'Courier New',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2mm;font-size:6.5px;margin-top:0.4mm;"><t t-esc="asset.name if asset else ''"/></div>
+                        </div>
+                        <t t-if="price_included and asset and company">
+                            <div style="margin-top:0.5mm;width:100%;text-align:center;overflow:hidden;">
+                                <strong style="font-weight:700;color:#000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;font-size:7px;" t-esc="asset.amount or 0"
+                                        t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"/>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </td>
+        </template>
+
+        <!-- 4x12 No Price Template -->
+        <template id="report_simple_label4x12_no_price">
+            <t t-set="barcode_size" t-value="'width:26mm;height:5mm'"/>
+            <t t-set="table_style" t-value="'width:43mm;height:19mm;' + table_style"/>
+            <td t-att-style="make_invisible and 'visibility:hidden;'" >
+                <div t-att-style="table_style + 'border-radius:2mm;box-shadow:0 1px 3px rgba(0,0,0,0.15);overflow:hidden;display:flex;flex-direction:column;height:100%;box-sizing:border-box;border:1px solid #e0e0e0;'">
+                    <!-- Red band at top -->
+                    <div t-att-style="'background-color:' + (red_band_color or '#dc3545') + ';color:white;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;flex-shrink:0;overflow:hidden;padding:0.8mm 1.5mm;height:5.5mm;min-height:5.5mm;max-height:5.5mm;'">
+                        <div style="font-weight:600;letter-spacing:0.5px;text-transform:uppercase;line-height:1.1;white-space:nowrap;font-size:5.5px;margin-bottom:0.3mm;">PROPERTY OF</div>
+                        <div style="font-weight:700;text-transform:uppercase;line-height:1.1;max-width:95%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:6.5px;"><t t-esc="company.name if company else ''"/></div>
+                    </div>
+                    <!-- White section with no price -->
+                    <div style="background-color:white;flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:0;overflow:hidden;box-sizing:border-box;position:relative;padding:1mm 1.5mm 0.8mm 1.5mm;">
+                        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%;text-align:center;overflow:hidden;">
+                            <t t-if="barcode and not make_invisible">
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=0' % ('Code128', quote_plus(barcode or ''), 600, 150)" t-att-style="barcode_size" alt="Barcode" style="display:block;margin:0 auto;max-height:5mm;"/>
+                            </t>
+                            <div style="font-weight:700;color:#000;text-align:center;letter-spacing:0.5px;font-family:'Courier New',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2mm;font-size:6.5px;margin-top:0.4mm;"><t t-esc="asset.name if asset else ''"/></div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </template>
+
+        <!-- Custom Template -->
+        <template id="report_simple_label_custom">
+            <t t-set="barcode_size" t-value="'width:32mm;height:7mm'"/>
+            <t t-set="table_style" t-value="'width:55mm;height:26mm;' + table_style"/>
+            <td t-att-style="make_invisible and 'visibility:hidden;'">
+                <div t-att-style="table_style + 'border-radius:3mm;box-shadow:0 1px 3px rgba(0,0,0,0.15);overflow:hidden;display:flex;flex-direction:column;height:100%;box-sizing:border-box;border:1px solid #e0e0e0;'">
+                    <!-- Red band at top -->
+                    <div t-att-style="'background-color:' + (red_band_color or '#dc3545') + ';color:white;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;flex-shrink:0;overflow:hidden;padding:1.5mm 2.5mm;height:7mm;min-height:7mm;max-height:7mm;'">
+                        <div style="font-weight:600;letter-spacing:0.5px;text-transform:uppercase;line-height:1.1;white-space:nowrap;font-size:7px;margin-bottom:0.4mm;">PROPERTY OF</div>
+                        <div style="font-weight:700;text-transform:uppercase;line-height:1.1;max-width:95%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;"><t t-esc="company.name if company else ''"/></div>
+                    </div>
+                    <!-- White section -->
+                    <div style="background-color:white;flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:0;overflow:hidden;box-sizing:border-box;position:relative;padding:2mm 2.5mm;">
+                        <div style="width:100%;text-align:center;overflow:hidden;margin-bottom:1mm;">
+                            <t t-if="barcode and not make_invisible">
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=0' % ('Code128', quote_plus(barcode or ''), 600, 150)" t-att-style="barcode_size" alt="Barcode" style="display:block;margin:0 auto;"/>
+                            </t>
+                            <div style="font-weight:700;color:#000;text-align:center;letter-spacing:0.5px;font-family:'Courier New',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2mm;font-size:8.5px;margin-top:0.8mm;"><t t-esc="asset.name if asset else ''"/></div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </template>
+
+        <!-- Main Report Template -->
+        <template id="report_assetlabel">
+            <t t-call="web.html_container">
+                <t t-if="columns and rows">
+                    <t t-if="columns == 2 and rows == 7">
+                        <t t-set="padding_page" t-value="'padding: 14mm 3mm'"/>
+                        <t t-set="report_to_call" t-value="'2x7'"/>
+                    </t>
+                    <t t-if="columns == 4 and rows == 7">
+                        <t t-set="padding_page" t-value="'padding: 14mm 3mm'"/>
+                        <t t-set="report_to_call" t-value="'4x7'"/>
+                    </t>
+                    <t t-if="columns == 4 and rows == 12">
+                        <t t-set="padding_page" t-value="'padding: 20mm 8mm'"/>
+                        <t t-set="report_to_call" t-value="'4x12'"/>
+                    </t>
+                    <t t-if="columns != 2 and columns != 4">
+                        <t t-set="padding_page" t-value="'padding: 14mm 3mm'"/>
+                        <t t-set="report_to_call" t-value="'custom'"/>
+                    </t>
+                    <t t-if="columns == 2 and rows != 7">
+                        <t t-set="padding_page" t-value="'padding: 14mm 3mm'"/>
+                        <t t-set="report_to_call" t-value="'custom'"/>
+                    </t>
+                    <t t-if="columns == 4 and rows != 7 and rows != 12">
+                        <t t-set="padding_page" t-value="'padding: 14mm 3mm'"/>
+                        <t t-set="report_to_call" t-value="'custom'"/>
+                    </t>
+                    <t t-foreach="range(page_numbers)" t-as="page">
+                        <div class="o_label_sheet" t-att-style="padding_page">
+                            <table class="my-0 table table-sm table-borderless" style="table-layout: fixed; width: 100%;">
+                                <t t-foreach="range(rows)" t-as="row">
+                                    <tr>
+                                        <t t-foreach="range(columns)" t-as="column">
+                                            <t t-set="item_index" t-value="page * rows * columns + row * columns + column"/>
+                                            <t t-if="item_index &lt; total_items">
+                                                <t t-set="label_item" t-value="label_items[item_index]"/>
+                                                <t t-set="asset" t-value="label_item['asset']"/>
+                                                <t t-set="barcode" t-value="label_item['barcode']"/>
+                                                <t t-set="make_invisible" t-value="False"/>
+                                            </t>
+                                            <t t-else="">
+                                                <t t-set="make_invisible" t-value="True"/>
+                                                <t t-set="asset" t-value="None"/>
+                                                <t t-set="barcode" t-value="None"/>
+                                            </t>
+                                            <t t-set="table_style" t-value="''"/>
+                                            <t t-if="report_to_call == '2x7'">
+                                                <t t-call="asset_management.report_simple_label2x7"/>
+                                            </t>
+                                            <t t-elif="report_to_call == '4x7'">
+                                                <t t-call="asset_management.report_simple_label4x7"/>
+                                            </t>
+                                            <t t-elif="report_to_call == '4x12'">
+                                                <t t-if="price_included">
+                                                    <t t-call="asset_management.report_simple_label4x12"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <t t-call="asset_management.report_simple_label4x12_no_price"/>
+                                                </t>
+                                            </t>
+                                            <t t-elif="report_to_call == 'custom'">
+                                                <t t-call="asset_management.report_simple_label_custom"/>
+                                            </t>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
